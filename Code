@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Section</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .faq-header h1 {
+            color: black;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .faq-header p {
+            color: black;
+            font-size: 1.1em;
+        }
+
+        /* Main Category Styles */
+        .faq-category {
+            margin-bottom: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+        }
+
+        .faq-category:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .faq-category.active {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .faq-category-header {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.3em;
+            color: black;
+            transition: all 0.3s ease;
+            user-select: none;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+        }
+
+        .faq-category-header:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: #667eea;
+        }
+
+        .faq-category-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            margin-left: 15px;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .faq-category.active .faq-category-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Sub Questions Container */
+        .faq-category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(102, 126, 234, 0.02);
+        }
+
+        .faq-category-content.active {
+            max-height: 800px;
+            padding: 20px 0;
+        }
+
+        /* Individual Question Styles */
+        .faq-item {
+            margin: 0 20px 15px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .faq-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .faq-item.active {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1em;
+            color: black;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            background: rgba(102, 126, 234, 0.03);
+            color: #667eea;
+        }
+
+        .faq-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            margin-left: 15px;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.01), rgba(118, 75, 162, 0.01));
+        }
+
+        .faq-answer.active {
+            max-height: 200px;
+            padding: 0 25px 20px 25px;
+        }
+
+        .faq-answer-content {
+            color: black;
+            line-height: 1.6;
+            font-size: 0.95em;
+            padding-top: 15px;
+            border-top: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .faq-category {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .faq-category:nth-child(2) { animation-delay: 0.1s; }
+        .faq-category:nth-child(3) { animation-delay: 0.2s; }
+        .faq-category:nth-child(4) { animation-delay: 0.3s; }
+
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 30px 20px;
+                margin: 20px 10px;
+            }
+            
+            .faq-header h1 {
+                font-size: 2em;
+            }
+            
+            .faq-category-header {
+                padding: 20px;
+                font-size: 1.1em;
+            }
+            
+            .faq-question {
+                padding: 15px 20px;
+                font-size: 0.95em;
+            }
+            
+            .faq-answer.active {
+                padding: 0 20px 15px 20px;
+            }
+            
+            .faq-item {
+                margin: 0 15px 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <div class="faq-header">
+            <h1>Frequently Asked Questions</h1>
+            <p>Find answers to common questions below</p>
+        </div>
+        
+        <!-- Planning & Services Category -->
+        <div class="faq-category">
+            <div class="faq-category-header">
+                <span><strong>Planning & Services</strong></span>
+                <div class="faq-category-icon">+</div>
+            </div>
+            <div class="faq-category-content">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What areas do you serve?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Metropolitan Atlanta Area
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I get started with my project?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Send an email including: contracting project, images, and any additional details.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do I need to provide the materials, or do you supply them?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We supply the materials, but are open to using client supplied materials
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing & Payment Category -->
+        <div class="faq-category">
+            <div class="faq-category-header">
+                <span><strong>Pricing & Payment</strong></span>
+                <div class="faq-category-icon">+</div>
+            </div>
+            <div class="faq-category-content">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do you determine the cost of a project?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Depends on: project dimensions, materials, and client's budget.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What payment methods do you accept?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Check & Zelle
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer financing or payment plans?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes. Depending on the project, we require a 50% deposit signing fee.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warranty & Follow-Up Category -->
+        <div class="faq-category">
+            <div class="faq-category-header">
+                <span><strong>Warranty & Follow-Up</strong></span>
+                <div class="faq-category-icon">+</div>
+            </div>
+            <div class="faq-category-content">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do you handle unexpected issues?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            All work sites are insured during project construction.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What happens if I notice an issue after the project is finished?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Contact us with the issue, and we will perform an evaluation free of charge.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you provide ongoing maintenance or repair services?</span>
+                        <div class="faq-icon">+</div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes. Contact us with your maintenance request to explore our payment plans.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle main category dropdowns
+            const categories = document.querySelectorAll('.faq-category');
+            
+            categories.forEach(category => {
+                const header = category.querySelector('.faq-category-header');
+                const content = category.querySelector('.faq-category-content');
+                
+                header.addEventListener('click', () => {
+                    const isActive = category.classList.contains('active');
+                    
+                    // Close all other categories
+                    categories.forEach(otherCategory => {
+                        if (otherCategory !== category) {
+                            otherCategory.classList.remove('active');
+                            otherCategory.querySelector('.faq-category-content').classList.remove('active');
+                            // Also close all questions in other categories
+                            const otherQuestions = otherCategory.querySelectorAll('.faq-item');
+                            otherQuestions.forEach(item => {
+                                item.classList.remove('active');
+                                item.querySelector('.faq-answer').classList.remove('active');
+                            });
+                        }
+                    });
+                    
+                    // Toggle current category
+                    if (isActive) {
+                        category.classList.remove('active');
+                        content.classList.remove('active');
+                        // Close all questions in this category
+                        const questions = category.querySelectorAll('.faq-item');
+                        questions.forEach(item => {
+                            item.classList.remove('active');
+                            item.querySelector('.faq-answer').classList.remove('active');
+                        });
+                    } else {
+                        category.classList.add('active');
+                        content.classList.add('active');
+                    }
+                });
+            });
+
+            // Handle individual question dropdowns
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                
+                question.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent category from closing
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other FAQ items in the same category
+                    const parentCategory = item.closest('.faq-category');
+                    const siblingItems = parentCategory.querySelectorAll('.faq-item');
+                    siblingItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.faq-answer').classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    if (isActive) {
+                        item.classList.remove('active');
+                        answer.classList.remove('active');
+                    } else {
+                        item.classList.add('active');
+                        answer.classList.add('active');
+                    }
+                });
+            });
+            
+            // Add keyboard navigation
+            const allHeaders = document.querySelectorAll('.faq-category-header, .faq-question');
+            allHeaders.forEach((header) => {
+                header.setAttribute('tabindex', '0');
+                header.setAttribute('role', 'button');
+                header.setAttribute('aria-expanded', 'false');
+                
+                header.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        header.click();
+                    }
+                });
+                
+                // Update aria-expanded when clicked
+                header.addEventListener('click', () => {
+                    setTimeout(() => {
+                        const isActive = header.closest('.faq-category, .faq-item').classList.contains('active');
+                        header.setAttribute('aria-expanded', isActive.toString());
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
